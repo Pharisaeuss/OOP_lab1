@@ -1,0 +1,14 @@
+C:\KPI_DZ\OOP_lab1\bin\Debug\net7.0\OOP_lab1.exe
+C:\KPI_DZ\OOP_lab1\bin\Debug\net7.0\OOP_lab1.deps.json
+C:\KPI_DZ\OOP_lab1\bin\Debug\net7.0\OOP_lab1.runtimeconfig.json
+C:\KPI_DZ\OOP_lab1\bin\Debug\net7.0\OOP_lab1.dll
+C:\KPI_DZ\OOP_lab1\bin\Debug\net7.0\OOP_lab1.pdb
+C:\KPI_DZ\OOP_lab1\obj\Debug\net7.0\OOP_lab1.GeneratedMSBuildEditorConfig.editorconfig
+C:\KPI_DZ\OOP_lab1\obj\Debug\net7.0\OOP_lab1.AssemblyInfoInputs.cache
+C:\KPI_DZ\OOP_lab1\obj\Debug\net7.0\OOP_lab1.AssemblyInfo.cs
+C:\KPI_DZ\OOP_lab1\obj\Debug\net7.0\OOP_lab1.csproj.CoreCompileInputs.cache
+C:\KPI_DZ\OOP_lab1\obj\Debug\net7.0\OOP_lab1.dll
+C:\KPI_DZ\OOP_lab1\obj\Debug\net7.0\refint\OOP_lab1.dll
+C:\KPI_DZ\OOP_lab1\obj\Debug\net7.0\OOP_lab1.pdb
+C:\KPI_DZ\OOP_lab1\obj\Debug\net7.0\OOP_lab1.genruntimeconfig.cache
+C:\KPI_DZ\OOP_lab1\obj\Debug\net7.0\ref\OOP_lab1.dll

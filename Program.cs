@@ -1,17 +1,18 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Reflection.Metadata;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MyGame
 {
 public class GameAccount 
 {
-    public string gamer1Name { get; set; }
+    public string UserName { get; set; }
     public int CurrentRating { get; set; }
     public int GamesCount { get; set; }
     public List<Game> SavedGames { get; set; }
 
-    public GameAccount(string gamer1name, int currentrating, int gamescount)
+    public GameAccount(string username, int currentrating, int gamescount)
     {
-        gamer1Name = gamer1name;
+        UserName = username;
         CurrentRating = currentrating;
         GamesCount = gamescount;
         SavedGames = new List<Game>();
@@ -19,14 +20,14 @@ public class GameAccount
 
     public void WinGame(int Ratting)
     {
-        Console.WriteLine($"{gamer1Name} win game against opponentName with ratting {Ratting}");
+        Console.WriteLine($"{UserName} win game against opponentName with ratting {Ratting}");
         CurrentRating += Ratting;
         GamesCount += 1;
     }
 
     public void LoseGame(int Ratting)
     {
-        Console.WriteLine($"{gamer1Name} lose game against opponentName with ratting {Ratting}");
+        Console.WriteLine($"{UserName} lose game against opponentName with ratting {Ratting}");
         GamesCount += 1;
         if (CurrentRating - Ratting < 1)
         {
@@ -40,14 +41,31 @@ public class GameAccount
 
     public string GetStats(List<Game> games)
     {
+        string gamer = $"Stats of {UserName}: \n";
         var SavedGames = new System.Text.StringBuilder();
         SavedGames.AppendLine("Opponents Name\t\tGame Result\tRating\tGames Count");
         foreach (var item in games)
-        {
-            SavedGames.AppendLine($"{item.OpponentName}\t\t\t{item.WinOrLose}\t\t{item.Rating}\t{item.GamesCount}");
+        {   
+            if (item.Gamer == UserName) 
+            {
+                SavedGames.AppendLine($"{item.OpponentName}\t\t\t{item.WinOrLose}\t\t{item.Rating}\t{item.GamesCount}");
+            }
         }
-        return SavedGames.ToString();
+        return gamer + SavedGames.ToString();
     }
+
+   /* public string GetStats()
+    {   
+        string name = $"My name is {UserName}";
+            List<string> stats = new List<string>();
+            foreach (Game game in SavedGames)
+            {
+                Console.WriteLine(stats);
+            }
+            string allTexts = string.Join('\n', stats);
+            return name + "\nI saved this posts:\n" + allTexts;
+
+    }*/
 }
 
 public class Game 
@@ -57,19 +75,21 @@ public class Game
     public string WinOrLose { get; set; }
     public int Rating { get; set; }
     public int GamesCount { get; set; }
+    public string Gamer { get; set; }
 
-    public Game(string opponent, string whowins, int rating, int gamescount)
+    public Game(string opponent, string whowins, int rating, int gamescount, string gamer)
     {
         OpponentName = opponent;
         WinOrLose = whowins;
         Rating = rating;
         GamesCount = gamescount;
+        Gamer = gamer;
     }
-}
 
-public enum Results
-{
-    Win, Lose
+    public void SaveGame(GameAccount user)
+        {
+            user.SavedGames.Add(this);
+        }
 }
 class Program
 {
@@ -82,8 +102,8 @@ class Program
         List<string> OpponentsNames = new List<string> {"Warrior", "Mage", "Archer", "Thief"};
         List<string> WinOrLose = new List<string> {"Win", "Lose"};
         Random rnd = new Random();
-        Game StartGame1 = new Game(OpponentsNames[rnd.Next(0, OpponentsNames.Count)], WinOrLose[rnd.Next(0, WinOrLose.Count)], rnd.Next(1, 101), gamer1.GamesCount);
-        Game StartGame2 = new Game(OpponentsNames[rnd.Next(0, OpponentsNames.Count)], WinOrLose[rnd.Next(0, WinOrLose.Count)], rnd.Next(1, 101), gamer2.GamesCount);
+        Game StartGame1 = new Game(OpponentsNames[rnd.Next(0, OpponentsNames.Count)], WinOrLose[rnd.Next(0, WinOrLose.Count)], rnd.Next(1, 101), gamer1.GamesCount, gamer1.UserName);
+        Game StartGame2 = new Game(OpponentsNames[rnd.Next(0, OpponentsNames.Count)], WinOrLose[rnd.Next(0, WinOrLose.Count)], rnd.Next(1, 101), gamer2.GamesCount, gamer2.UserName);
         List<Game> allGames = new List<Game>();
         allGames.Add(StartGame1);
         allGames.Add(StartGame2); /* треба переробити функцію щоб можна було викликати стати конкретного гравця(по прикладу викладача)*/
@@ -105,7 +125,11 @@ class Program
             gamer2.LoseGame(StartGame2.Rating);
         }
 
+        StartGame1.SaveGame(gamer1);
+        StartGame2.SaveGame(gamer2);
+
         Console.WriteLine(gamer1.GetStats(allGames));
+        Console.WriteLine(gamer2.GetStats(allGames));
        
 
 

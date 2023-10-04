@@ -8,14 +8,12 @@ public class GameAccount
     public string UserName { get; set; }
     public int CurrentRating { get; set; }
     public int GamesCount { get; set; }
-    public List<Game> SavedGames { get; set; }
 
     public GameAccount(string username, int currentrating, int gamescount)
     {
         UserName = username;
         CurrentRating = currentrating;
         GamesCount = gamescount;
-        SavedGames = new List<Game>();
     }
 
     public void WinGame(int Ratting)
@@ -53,19 +51,6 @@ public class GameAccount
         }
         return gamer + SavedGames.ToString();
     }
-
-   /* public string GetStats()
-    {   
-        string name = $"My name is {UserName}";
-            List<string> stats = new List<string>();
-            foreach (Game game in SavedGames)
-            {
-                Console.WriteLine(stats);
-            }
-            string allTexts = string.Join('\n', stats);
-            return name + "\nI saved this posts:\n" + allTexts;
-
-    }*/
 }
 
 public class Game 
@@ -78,7 +63,7 @@ public class Game
     public string Gamer { get; set; }
 
     public Game(string opponent, string whowins, int rating, int gamescount, string gamer)
-    {
+    {   
         OpponentName = opponent;
         WinOrLose = whowins;
         Rating = rating;
@@ -86,10 +71,6 @@ public class Game
         Gamer = gamer;
     }
 
-    public void SaveGame(GameAccount user)
-        {
-            user.SavedGames.Add(this);
-        }
 }
 class Program
 {
@@ -106,7 +87,7 @@ class Program
         Game StartGame2 = new Game(OpponentsNames[rnd.Next(0, OpponentsNames.Count)], WinOrLose[rnd.Next(0, WinOrLose.Count)], rnd.Next(1, 101), gamer2.GamesCount, gamer2.UserName);
         List<Game> allGames = new List<Game>();
         allGames.Add(StartGame1);
-        allGames.Add(StartGame2); /* треба переробити функцію щоб можна було викликати стати конкретного гравця(по прикладу викладача)*/
+        allGames.Add(StartGame2); 
         if (StartGame1.WinOrLose is "Win")
         {
             gamer1.WinGame(StartGame1.Rating);
@@ -125,18 +106,11 @@ class Program
             gamer2.LoseGame(StartGame2.Rating);
         }
 
-        StartGame1.SaveGame(gamer1);
-        StartGame2.SaveGame(gamer2);
-
         Console.WriteLine(gamer1.GetStats(allGames));
         Console.WriteLine(gamer2.GetStats(allGames));
-       
-
-
-        
-        
+               
     }
-}
+  }
 }
 
 

@@ -16,25 +16,28 @@ public class GameAccount
         GamesCount = gamescount;
     }
 
-    public void WinGame(int Ratting)
+    public void WinGame(int Ratting, string opponent)
     {
-        Console.WriteLine($"{UserName} win game against opponentName with ratting {Ratting}");
+        if (CurrentRating + Ratting  <= 0)
+        {
+            throw new ArgumentOutOfRangeException("Invalid rating value. Rating cannot be negative or zero.");
+        }
+
+        Console.WriteLine($"{UserName} win game against {opponent} with ratting {Ratting}");
         CurrentRating += Ratting;
         GamesCount += 1;
     }
 
-    public void LoseGame(int Ratting)
+    public void LoseGame(int Ratting, string opponent)
     {
-        Console.WriteLine($"{UserName} lose game against opponentName with ratting {Ratting}");
+        Console.WriteLine($"{UserName} lose game against {opponent} with ratting {Ratting}");
         GamesCount += 1;
         if (CurrentRating - Ratting < 1)
         {
             CurrentRating = 1;
         }
-        else
-        {
-            CurrentRating -= Ratting;
-        }
+        
+        CurrentRating -= Ratting;
     }
 
     public string GetStats(List<Game> games)
@@ -90,24 +93,35 @@ class Program
         allGames.Add(StartGame2); 
         if (StartGame1.WinOrLose is "Win")
         {
-            gamer1.WinGame(StartGame1.Rating);
+            gamer1.WinGame(StartGame1.Rating, StartGame1.OpponentName);
         }
         else
         {
-            gamer1.LoseGame(StartGame1.Rating);
+            gamer1.LoseGame(StartGame1.Rating, StartGame1.OpponentName);
         }
 
         if (StartGame2.WinOrLose is "Win")
         {
-            gamer2.WinGame(StartGame2.Rating);
+            gamer2.WinGame(StartGame2.Rating, StartGame2.OpponentName);
         }
         else
         {
-            gamer2.LoseGame(StartGame2.Rating);
+            gamer2.LoseGame(StartGame2.Rating, StartGame2.OpponentName);
         }
 
         Console.WriteLine(gamer1.GetStats(allGames));
         Console.WriteLine(gamer2.GetStats(allGames));
+
+        try
+        {
+            gamer1.WinGame(-1000, StartGame1.OpponentName);
+            gamer2.LoseGame(-1000, StartGame2.OpponentName);
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            Console.WriteLine("Error: " + e.Message);
+            return;
+        }
                
     }
   }

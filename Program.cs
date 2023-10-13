@@ -32,9 +32,9 @@ public class GameAccount
     {
         Console.WriteLine($"{UserName} lose game against {opponent} with ratting {Ratting}");
         GamesCount += 1;
-        if (CurrentRating - Ratting < 1)
+        if (CurrentRating - Ratting  <= 0)
         {
-            CurrentRating = 1;
+            throw new ArgumentOutOfRangeException("Invalid rating value. Rating cannot be negative or zero.");
         }
         
         CurrentRating -= Ratting;

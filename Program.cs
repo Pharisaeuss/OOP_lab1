@@ -1,5 +1,7 @@
 ﻿using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
+using System;
+using System.Collections.Generic;
 
 namespace MyGame
 {
@@ -8,12 +10,15 @@ public class GameAccount
     public string UserName { get; set; }
     public int CurrentRating { get; set; }
     public int GamesCount { get; set; }
+    public List<Game> allGames;
 
     public GameAccount(string username, int currentrating, int gamescount)
     {
         UserName = username;
         CurrentRating = currentrating;
         GamesCount = gamescount;
+        allGames = new List<Game>();
+        
     }
 
     public void WinGame(int Ratting, string opponent)
@@ -26,6 +31,7 @@ public class GameAccount
         Console.WriteLine($"{UserName} win game against {opponent} with ratting {Ratting}");
         CurrentRating += Ratting;
         GamesCount += 1;
+        allGames.Add(new Game {OpponentName = opponent, WinOrLose = "Win", Rating = Ratting, GamesCount = GamesCount, Gamer = UserName });
     }
 
     public void LoseGame(int Ratting, string opponent)
@@ -37,42 +43,37 @@ public class GameAccount
             throw new ArgumentOutOfRangeException("Invalid rating value. Rating cannot be negative or zero.");
         }
         
+        GamesCount += 1;
         CurrentRating -= Ratting;
+
+        allGames.Add(new Game {OpponentName = opponent, WinOrLose = "Lose", Rating = Ratting, GamesCount = GamesCount, Gamer = UserName });
+
     }
 
-    public string GetStats(List<Game> games)
+    public string GetStats()
     {
         string gamer = $"Stats of {UserName}: \n";
         var SavedGames = new System.Text.StringBuilder();
         SavedGames.AppendLine("Opponents Name\t\tGame Result\tRating\tGames Count");
-        foreach (var item in games)
+        foreach (var item in allGames)
         {   
             if (item.Gamer == UserName) 
             {
                 SavedGames.AppendLine($"{item.OpponentName}\t\t\t{item.WinOrLose}\t\t{item.Rating}\t{item.GamesCount}");
             }
         }
-        return gamer + SavedGames.ToString();
+        return gamer + SavedGames;
     }
 }
 
 public class Game 
 
 {
-    public string OpponentName { get; set; }
-    public string WinOrLose { get; set; }
+    public string? OpponentName { get; set; }
+    public string? WinOrLose { get; set; }
     public int Rating { get; set; }
     public int GamesCount { get; set; }
-    public string Gamer { get; set; }
-
-    public Game(string opponent, string whowins, int rating, int gamescount, string gamer)
-    {   
-        OpponentName = opponent;
-        WinOrLose = whowins;
-        Rating = rating;
-        GamesCount = gamescount;
-        Gamer = gamer;
-    }
+    public string? Gamer { get; set; }
 
 }
 class Program
@@ -86,36 +87,19 @@ class Program
         List<string> OpponentsNames = new List<string> {"Warrior", "Mage", "Archer", "Thief"};
         List<string> WinOrLose = new List<string> {"Win", "Lose"};
         Random rnd = new Random();
-        Game StartGame1 = new Game(OpponentsNames[rnd.Next(0, OpponentsNames.Count)], WinOrLose[rnd.Next(0, WinOrLose.Count)], rnd.Next(1, 101), gamer1.GamesCount, gamer1.UserName);
-        Game StartGame2 = new Game(OpponentsNames[rnd.Next(0, OpponentsNames.Count)], WinOrLose[rnd.Next(0, WinOrLose.Count)], rnd.Next(1, 101), gamer2.GamesCount, gamer2.UserName);
-        List<Game> allGames = new List<Game>();
-        allGames.Add(StartGame1);
-        allGames.Add(StartGame2); 
-        if (StartGame1.WinOrLose is "Win")
-        {
-            gamer1.WinGame(StartGame1.Rating, StartGame1.OpponentName);
-        }
-        else
-        {
-            gamer1.LoseGame(StartGame1.Rating, StartGame1.OpponentName);
-        }
+        
+  
+        gamer1.WinGame(60, OpponentsNames[rnd.Next(OpponentsNames.Count)]);
+        gamer2.LoseGame(10, OpponentsNames[rnd.Next(OpponentsNames.Count)]);
 
-        if (StartGame2.WinOrLose is "Win")
-        {
-            gamer2.WinGame(StartGame2.Rating, StartGame2.OpponentName);
-        }
-        else
-        {
-            gamer2.LoseGame(StartGame2.Rating, StartGame2.OpponentName);
-        }
+        gamer1.GetStats();
+        gamer2.GetStats();
 
-        Console.WriteLine(gamer1.GetStats(allGames));
-        Console.WriteLine(gamer2.GetStats(allGames));
-
+      
         try
         {
-            gamer1.WinGame(-1000, StartGame1.OpponentName);
-            gamer2.LoseGame(-1000, StartGame2.OpponentName);
+            gamer1.WinGame(-1000, OpponentsNames[rnd.Next(OpponentsNames.Count)]);
+            gamer2.LoseGame(-1000, OpponentsNames[rnd.Next(OpponentsNames.Count)]);
         }
         catch (ArgumentOutOfRangeException e)
         {

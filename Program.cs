@@ -62,7 +62,7 @@ public class GameAccount
                 SavedGames.AppendLine($"{item.OpponentName}\t\t\t{item.WinOrLose}\t\t{item.Rating}\t{item.GamesCount}");
             }
         }
-        return gamer + SavedGames;
+        return gamer + SavedGames.ToString();
     }
 }
 
@@ -92,8 +92,8 @@ class Program
         gamer1.WinGame(60, OpponentsNames[rnd.Next(OpponentsNames.Count)]);
         gamer2.LoseGame(10, OpponentsNames[rnd.Next(OpponentsNames.Count)]);
 
-        gamer1.GetStats();
-        gamer2.GetStats();
+        Console.WriteLine(gamer1.GetStats());
+        Console.WriteLine(gamer2.GetStats());
 
       
         try
